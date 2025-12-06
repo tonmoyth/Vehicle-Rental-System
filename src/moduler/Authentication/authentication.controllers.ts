@@ -19,6 +19,24 @@ const createdUsers = async (req: Request, res: Response) => {
   }
 };
 
+const loginUsers = async (req: Request, res: Response) => {
+  try {
+    const result = await authenticationService.loginUsers(req, res);
+    res.status(201).json({
+      success: true,
+      message: "User Login successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+      errors: error,
+    });
+  }
+};
+
 export const authenticationControllers = {
   createdUsers,
+  loginUsers,
 };

@@ -5,4 +5,6 @@ const router = Router();
 
 router.post("/signup", authenticationControllers.createdUsers);
 
-export default router;
+router.post("/signin", authenticationControllers.loginUsers);
+
+export const authenticationRouter = router;
