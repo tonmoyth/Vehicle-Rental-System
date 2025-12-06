@@ -6,4 +6,6 @@ const router = Router();
 
 router.post("/", vehicles("admin"), vehiclesController.createdVehicles);
 
+router.get("/", vehiclesController.getVehicles);
+
 export const vehiclesRouter = router;

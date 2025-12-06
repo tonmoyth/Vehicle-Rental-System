@@ -3,7 +3,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../config";
 import { pool } from "../database/db";
 
-export const vehicles = (role: string) => {
+export const vehicles = (...roles: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const tokenWithBearer = req.headers.authorization;
     const token = tokenWithBearer?.split(" ")[1];
@@ -32,11 +32,13 @@ export const vehicles = (role: string) => {
     }
 
     req.user = decoded;
+    console.log(decoded.role);
+    console.log(roles);
 
-    if (role !== decoded.role) {
+    if (roles.length && !roles.includes(decoded.role)) {
       return res.status(400).json({
         success: false,
-        message: "Only admin can access",
+        message: "this role cannot access",
       });
     }
 
