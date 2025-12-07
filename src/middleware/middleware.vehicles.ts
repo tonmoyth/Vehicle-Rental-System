@@ -32,8 +32,6 @@ export const vehicles = (...roles: string[]) => {
     }
 
     req.user = decoded;
-    console.log(decoded.role);
-    console.log(roles);
 
     if (roles.length && !roles.includes(decoded.role)) {
       return res.status(400).json({
