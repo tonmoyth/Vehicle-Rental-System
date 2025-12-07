@@ -37,7 +37,27 @@ const updatedUsers = async (req: Request, res: Response) => {
   }
 };
 
+const deletedUsers = async (req: Request, res: Response) => {
+  try {
+    const result = await usersServices.deletedUsers(
+      req.params.userId as string
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+      errors: error,
+    });
+  }
+};
+
 export const usersController = {
   getUsers,
   updatedUsers,
+  deletedUsers,
 };

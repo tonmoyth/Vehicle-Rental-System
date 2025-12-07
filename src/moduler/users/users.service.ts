@@ -24,7 +24,21 @@ const updatedUsers = async (req: Request) => {
   return result;
 };
 
+
+const deletedUsers = async (userId:string) => {
+
+  const result = await pool.query(
+    `
+    DELETE FROM users WHERE id=$1
+    `,
+    [userId]
+  );
+
+  return result;
+};
+
 export const usersServices = {
   getUsers,
   updatedUsers,
+  deletedUsers,
 };

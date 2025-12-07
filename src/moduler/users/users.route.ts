@@ -8,4 +8,6 @@ router.get("/", auth("admin"), usersController.getUsers);
 
 router.put("/:userId", auth("admin"), usersController.updatedUsers);
 
+router.delete("/:userId", auth("admin"), usersController.deletedUsers);
+
 export const usersRoute = router;
