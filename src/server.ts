@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import initDB from "./database/db";
 import { authenticationRouter } from "./moduler/Authentication/authentication.route";
 import { vehiclesRouter } from "./moduler/Vehicles/vehicles.route";
+import { usersRoute } from "./moduler/users/users.route";
 
 const app = express();
 const port = 5000;
@@ -19,6 +20,8 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/v1/auth", authenticationRouter);
 
 app.use("/api/v1/vehicles", vehiclesRouter);
+
+app.use("/api/v1/users", usersRoute);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

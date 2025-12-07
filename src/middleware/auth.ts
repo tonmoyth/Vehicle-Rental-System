@@ -3,7 +3,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../config";
 import { pool } from "../database/db";
 
-export const vehicles = (...roles: string[]) => {
+export const auth = (...roles: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const tokenWithBearer = req.headers.authorization;
     const token = tokenWithBearer?.split(" ")[1];
