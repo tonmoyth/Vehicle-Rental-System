@@ -58,6 +58,77 @@ const createdBooking = async (req: Request, res: Response) => {
   return result;
 };
 
+const getBooking = async () => {
+  const result = await pool.query(
+    `
+    SELECT * FROM bookings
+    `
+  );
+
+  const vehicles: any = [];
+
+  for (const book of result.rows) {
+    const vehicleId = book.vehicle_id;
+
+    const vehRes = await pool.query(
+      `
+    SELECT * FROM vehicles WHERE id=$1
+    `,
+      [vehicleId]
+    );
+
+    vehicles.push(vehRes.rows[0]);
+  }
+
+  const users: any = [];
+
+  for (const book of result.rows) {
+    const customerId = book.customer_id;
+
+    const vehRes = await pool.query(
+      `
+    SELECT * FROM users WHERE id=$1
+    `,
+      [customerId]
+    );
+
+    users.push(vehRes.rows[0]);
+  }
+
+  const calculate = result.rows.map((book) => {
+    const findVehicle = vehicles.find((v: any) => v.id === book.vehicle_id);
+
+    const dailyRent = findVehicle.daily_rent_price;
+
+    const startDay = new Date(book.rent_start_date) as any;
+    const endDay = new Date(book.rent_end_date) as any;
+    const oneDay = 24 * 60 * 60 * 1000;
+
+    const numberOfDay = Math.ceil((endDay - startDay) / oneDay);
+    const total_price = numberOfDay * dailyRent;
+    book.total_price = total_price;
+    book.status = "Active";
+
+    const bookingCustomer = users.find(
+      (user: any) => user.id === book.customer_id
+    );
+    book.customer = {
+      name: bookingCustomer.name,
+      email: bookingCustomer.email,
+    };
+
+    book.vehicle = {
+      vehicle_name: findVehicle.vehicle_name,
+      registration_number: findVehicle.registration_number,
+    };
+
+    return book;
+  });
+
+  return calculate;
+};
+
 export const bookingServices = {
   createdBooking,
+  getBooking,
 };

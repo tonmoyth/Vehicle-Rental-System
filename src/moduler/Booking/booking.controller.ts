@@ -19,6 +19,32 @@ const createdBooking = async (req: Request, res: Response) => {
   }
 };
 
+const getBooking = async (req: Request, res: Response) => {
+  try {
+    const result: any = await bookingServices.getBooking();
+
+    const user = req.user;
+
+    const selectBooking = result.filter(
+      (bookingData: any) => bookingData.customer.email === user?.email
+    );
+    console.log(selectBooking);
+
+    res.status(201).json({
+      success: true,
+      message: "Bookings retrieved successfully",
+      data: selectBooking,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+      errors: error,
+    });
+  }
+};
+
 export const controllerBooking = {
   createdBooking,
+  getBooking,
 };
