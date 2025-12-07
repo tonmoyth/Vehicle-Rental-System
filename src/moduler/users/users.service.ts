@@ -7,6 +7,11 @@ const getUsers = async () => {
     SELECT * FROM users
     `
   );
+ 
+  result.rows.forEach((user) => {
+    delete user.password;
+  });
+  ;
 
   return result;
 };
@@ -24,9 +29,7 @@ const updatedUsers = async (req: Request) => {
   return result;
 };
 
-
-const deletedUsers = async (userId:string) => {
-
+const deletedUsers = async (userId: string) => {
   const result = await pool.query(
     `
     DELETE FROM users WHERE id=$1
