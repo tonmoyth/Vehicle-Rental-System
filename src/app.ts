@@ -6,7 +6,6 @@ import { usersRoute } from "./moduler/users/users.route";
 import { bookingRoute } from "./moduler/Booking/booking.route";
 
 export const app = express();
-const port = 5000;
 
 // middleware
 app.use(express.json());
