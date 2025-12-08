@@ -77,9 +77,7 @@ const UpdatedVehicles = async (req: Request, res: Response) => {
 
 const DeletedVehicles = async (req: Request, res: Response) => {
   try {
-    const result = await vehiclesServices.DeletedVehicles(
-      req.params.vehicleId as string
-    );
+    await vehiclesServices.DeletedVehicles(req, res);
 
     res.status(200).json({
       success: true,

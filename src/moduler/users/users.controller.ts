@@ -26,7 +26,7 @@ const updatedUsers = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: "User updated successfully",
-      data: result.rows,
+      data: result?.rows,
     });
   } catch (error: any) {
     res.status(400).json({
@@ -40,7 +40,7 @@ const updatedUsers = async (req: Request, res: Response) => {
 const deletedUsers = async (req: Request, res: Response) => {
   try {
     const result = await usersServices.deletedUsers(
-      req.params.userId as string
+      req,res
     );
 
     res.status(200).json({

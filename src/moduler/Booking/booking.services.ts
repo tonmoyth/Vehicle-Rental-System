@@ -157,16 +157,6 @@ const UpdatedBooking = async (req: Request, res: Response) => {
     [bookingId]
   );
 
-  const startDate = new Date(result.rows[0].rent_start_date);
-  const currentDate = new Date();
-
-  if (currentDate > startDate) {
-    return res.status(400).json({
-      success: false,
-      message: "Time expire",
-    });
-  }
-
   const getVehicle = await pool.query(
     `
     SELECT * FROM vehicles WHERE id=$1
@@ -177,6 +167,19 @@ const UpdatedBooking = async (req: Request, res: Response) => {
   const bookingVehicle = getVehicle.rows[0];
 
   if (status === "cancelled") {
+    const startDate = new Date(result.rows[0].rent_start_date);
+    const currentDate = new Date();
+
+    startDate.setHours(0, 0, 0, 0);
+    currentDate.setHours(0, 0, 0, 0);
+
+    if (currentDate > startDate) {
+      return res.status(400).json({
+        success: false,
+        message: "Time expire",
+      });
+    }
+
     await pool.query(
       `
     UPDATE vehicles SET availability_status=$1 WHERE id=$2 RETURNING *

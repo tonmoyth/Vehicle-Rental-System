@@ -53,7 +53,6 @@ const getBooking = async (req: Request, res: Response) => {
 const UpdatedBooking = async (req: Request, res: Response) => {
   try {
     const result: any = await bookingServices.UpdatedBooking(req, res);
-    console.log(result);
     res.status(200).json({
       success: true,
       message: `${

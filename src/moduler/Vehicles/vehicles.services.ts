@@ -1,4 +1,4 @@
-import { Request } from "express";
+import { Request, Response } from "express";
 import { pool } from "../../database/db";
 
 const createdVehicles = async (req: Request) => {
@@ -73,10 +73,31 @@ const UpdatedVehicles = async (req: Request) => {
   return result;
 };
 
-const DeletedVehicles = async (vehicleId: string) => {
+const DeletedVehicles = async (req: Request, res: Response) => {
+  const { vehicleId } = req.params;
+
+  const isBooked = await pool.query(
+    `
+    SELECT * FROM vehicles WHERE id=$1 
+    `,
+    [vehicleId]
+  );
+  if (isBooked.rows.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: "This vehicle not exist!!",
+    });
+  }
+  if (isBooked.rows[0].availability_status === "booked") {
+    return res.status(400).json({
+      success: false,
+      message: "This vehicle already booked",
+    });
+  }
+
   const result = await pool.query(
     `
-    DELETE FROM vehicles WHERE id=$1 
+    DELETE FROM vehicles WHERE id=$1
     `,
     [vehicleId]
   );
